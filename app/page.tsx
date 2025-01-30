@@ -108,106 +108,91 @@ export default function Home() {
           </nav>
 
           {/* Main Content */}
-          <main className="flex-1 flex flex-col items-center justify-center p-6">
-            <div className="w-full max-w-[640px] bg-white border border-gray-200 shadow-sm">
-              <div className="w-full h-12 bg-white border-b border-gray-200 flex items-center px-4">
-                <div className="flex items-center gap-2">
-                  <Tooltip text="why would you want to close this?">
-                    <div className="w-3 h-3 rounded-full bg-red-500" />
-                  </Tooltip>
-                  <Tooltip text="s/o to the 🅱️rowserbase devs">
-                    <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                  </Tooltip>
-                  <Tooltip text="@pk_iv was here">
-                    <div className="w-3 h-3 rounded-full bg-green-500" />
-                  </Tooltip>
-                </div>
-              </div>
+          <main className="flex-1 flex flex-col items-center p-6">
+            <div className="w-full max-w-[734px] flex flex-col gap-8">
+              <h1 className="text-2xl font-medium text-[#1b1b1b] tracking-[-0.16px] leading-8">
+                Create new query
+              </h1>
 
-              <div className="p-8 flex flex-col items-center gap-8">
-                <div className="flex flex-col items-center gap-3">
-                  <h1 className="text-2xl font-ppneue text-gray-900 text-center">
-                    Open Operator
-                  </h1>
-                  <p className="text-base font-ppsupply text-gray-500 text-center">
-                    Hit run to watch AI browse the web.
-                  </p>
-                </div>
-
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    const formData = new FormData(e.currentTarget);
-                    const input = e.currentTarget.querySelector(
-                      'input[name="message"]'
-                    ) as HTMLInputElement;
-                    const message = (formData.get("message") as string).trim();
-                    const finalMessage = message || input.placeholder;
-                    startChat(finalMessage);
-                  }}
-                  className="w-full max-w-[720px] flex flex-col items-center gap-3"
-                >
-                  <div className="relative w-full">
+              <div className="bg-white border border-[#d8d8d8] rounded-md p-3">
+                <div className="flex flex-col gap-4">
+                  {/* Title Input */}
+                  <div className="flex flex-col gap-1">
+                    <label className="flex items-center gap-1 px-0.5 py-1 text-base">
+                      <span className="font-medium text-text-DEFAULT">Query title</span>
+                      <span className="text-text-muted">- give your query a name</span>
+                    </label>
                     <input
-                      name="message"
                       type="text"
-                      placeholder="What's the price of NVIDIA stock?"
-                      className="w-full px-4 py-3 pr-[100px] border border-gray-200 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FF3B00] focus:border-transparent font-ppsupply"
+                      placeholder="Enter a title..."
+                      className="w-full px-3.5 py-1.5 border border-[#d4d4d4] rounded-md text-[15px] text-text-DEFAULT placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
-                    <AnimatedButton type="submit">Run</AnimatedButton>
                   </div>
-                </form>
-                <div className="grid grid-cols-2 gap-3 w-full">
-                  <button
-                    onClick={() =>
-                      startChat(
-                        "Who is the top GitHub contributor to Stagehand by Browserbase?"
-                      )
-                    }
-                    className="p-3 text-sm text-gray-600 border border-gray-200 hover:border-[#FF3B00] hover:text-[#FF3B00] transition-colors font-ppsupply text-left"
-                  >
-                    Who is the top contributor to Stagehand?
-                  </button>
-                  <button
-                    onClick={() =>
-                      startChat("How many wins do the 49ers have?")
-                    }
-                    className="p-3 text-sm text-gray-600 border border-gray-200 hover:border-[#FF3B00] hover:text-[#FF3B00] transition-colors font-ppsupply text-left"
-                  >
-                    How many wins do the 49ers have?
-                  </button>
-                  <button
-                    onClick={() => startChat("What is Stephen Curry's PPG?")}
-                    className="p-3 text-sm text-gray-600 border border-gray-200 hover:border-[#FF3B00] hover:text-[#FF3B00] transition-colors font-ppsupply text-left"
-                  >
-                    What is Stephen Curry&apos;s PPG?
-                  </button>
-                  <button
-                    onClick={() => startChat("How much is NVIDIA stock?")}
-                    className="p-3 text-sm text-gray-600 border border-gray-200 hover:border-[#FF3B00] hover:text-[#FF3B00] transition-colors font-ppsupply text-left"
-                  >
-                    How much is NVIDIA stock?
-                  </button>
+
+                  {/* URL Input */}
+                  <div className="flex flex-col gap-1">
+                    <label className="flex items-center gap-1 px-0.5 py-1 text-base">
+                      <span className="font-medium text-text-DEFAULT">Production URL</span>
+                      <span className="text-text-muted">- home page for your application</span>
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="https://www.application.com"
+                      className="w-full px-3.5 py-1.5 border border-[#d4d4d4] rounded-md text-[15px] text-text-DEFAULT placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    />
+                  </div>
+
+                  {/* Requirements Input */}
+                  <div className="flex flex-col gap-1">
+                    <label className="flex items-center gap-1 px-0.5 py-1 text-base">
+                      <span className="font-medium text-text-DEFAULT">Requirements</span>
+                      <span className="text-text-muted">- describe what you are testing</span>
+                    </label>
+                    <div className="relative">
+                      <textarea
+                        placeholder="Tell us about what you want to test or drag a file in"
+                        className="w-full px-3.5 py-1.5 border border-[#d4d4d4] rounded-md text-[15px] text-text-DEFAULT placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent min-h-[100px] resize-none"
+                      />
+                      <button className="absolute bottom-2 left-2 flex items-center gap-1 px-2 py-1 text-sm text-text-secondary hover:bg-gray-50 rounded">
+                        <Image
+                          src="/file.svg"
+                          alt="Attach"
+                          width={14}
+                          height={14}
+                          className="opacity-80"
+                        />
+                        <span>Attach</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex justify-between items-center pt-4">
+                    <div className="flex items-center gap-2">
+                      <button className="button-secondary">
+                        <Image
+                          src="/file.svg"
+                          alt="Save"
+                          width={14}
+                          height={14}
+                          className="opacity-80"
+                        />
+                        <span>Save as draft</span>
+                      </button>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <label className="flex items-center gap-2 text-sm text-text-secondary">
+                        <input type="checkbox" className="rounded border-gray-300" />
+                        Create more
+                      </label>
+                      <button className="button-primary px-3 py-1.5">
+                        Create
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-            <p className="text-base font-ppsupply text-center mt-8">
-              Powered by{" "}
-              <a
-                href="https://stagehand.dev"
-                className="text-yellow-600 hover:underline"
-              >
-                🤘 Stagehand
-              </a>{" "}
-              on{" "}
-              <a
-                href="https://browserbase.com"
-                className="text-[#FF3B00] hover:underline"
-              >
-                🅱️ Browserbase
-              </a>
-              .
-            </p>
           </main>
         </div>
       ) : (

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -15,6 +17,44 @@
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
+  margin: 0;
+  line-height: normal;
+  font-family: 'Inter', sans-serif;
+  background-color: #fbfbfb;
+  color: #1a1a1a;
+}
+
+@layer components {
+  .input-base {
+    @apply w-full px-3.5 py-1.5 border border-[#d4d4d4] rounded-md text-[15px] text-text-DEFAULT placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent;
+  }
+
+  .button-base {
+    @apply flex items-center gap-1 rounded-md text-sm font-medium transition-colors duration-200;
+  }
+
+  .button-primary {
+    @apply button-base bg-primary border border-primary-hover text-white shadow-button hover:bg-primary-hover;
+  }
+
+  .button-secondary {
+    @apply button-base bg-white border border-[#d4d4d4] text-text-secondary shadow-button hover:bg-gray-50;
+  }
+
+  .label-base {
+    @apply flex items-center gap-1 px-0.5 py-1 text-base;
+  }
+
+  .label-text {
+    @apply font-medium text-text-DEFAULT;
+  }
+
+  .label-hint {
+    @apply text-text-muted;
+  }
+}
+
+/* Custom checkbox styles */
+input[type="checkbox"] {
+  @apply rounded border-gray-300 text-primary focus:ring-primary;
 }
