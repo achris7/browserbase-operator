@@ -79,3 +79,12 @@ target/
 *.temp
 .env
 .env.local
+
+# Environment Files #
+###################
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.env*.local
