@@ -21,18 +21,20 @@ const ppSupply = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Open Operator",
-  description: "Watch AI browse the web, for free",
+  title: "Quell",
+  description: "Continuous QA testing and compliance",
   openGraph: {
     images: ["/og.png"],
-    title: "Open Operator",
-    description: "Watch AI browse the web, for free",
-    url: "https://operator.browserbase.com",
+    title: "Quell",
+    description: "Continuous QA testing and compliance",
+    url: "https://quellit.ai",
   },
   icons: {
     icon: [
-      { url: "/favicon.svg", type: "image/svg+xml" },
-      { url: "/favicon.ico" },
+      {
+        url: "/favicon.svg",
+        type: "image/svg+xml",
+      }
     ],
   },
 };
