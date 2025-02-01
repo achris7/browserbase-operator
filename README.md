@@ -1,8 +1,4 @@
-# Open Operator
-
-> [!WARNING]
-> This is simply a proof of concept.
-> Browserbase aims not to compete with web agents, but rather to provide all the necessary tools for anybody to build their own web agent. We strongly recommend you check out both [Browserbase](https://www.browserbase.com) and our open source project [Stagehand](https://www.stagehand.dev) to build your own web agent.
+# Quell
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fbrowserbase%2Fopen-operator&env=OPENAI_API_KEY,BROWSERBASE_API_KEY,BROWSERBASE_PROJECT_ID&envDescription=API%20keys%20needed%20to%20run%20Open%20Operator&envLink=https%3A%2F%2Fgithub.com%2Fbrowserbase%2Fopen-operator%23environment-variables)
 
@@ -63,6 +59,7 @@ For more on this, check out the code at [this commit](https://github.com/browser
 
 ### Key Technologies
 
+- **[CrewAI](https://www.crewai.com)**: Agent orchestration and tool layer
 - **[Browserbase](https://www.browserbase.com)**: Powers the core browser automation and interaction capabilities
 - **[Stagehand](https://www.stagehand.dev)**: Handles precise DOM manipulation and state management
 - **[Next.js](https://nextjs.org)**: Provides the modern web framework foundation
@@ -70,19 +67,8 @@ For more on this, check out the code at [this commit](https://github.com/browser
 
 ## Contributing
 
-We welcome contributions! Whether it's:
-
-- Adding new features
-- Improving documentation
-- Reporting bugs
-- Suggesting enhancements
-
 Please feel free to open issues and pull requests.
 
 ## License
 
-Open Operator is open source software licensed under the MIT license.
-
-## Acknowledgments
-
-This project is inspired by OpenAI's Operator feature and builds upon various open source technologies including Next.js, React, Browserbase, and Stagehand.
+Quell is proprietary software licensed under the MIT license.
