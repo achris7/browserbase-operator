@@ -43,19 +43,10 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see Ope
 
 Building a web agent is a complex task. You need to understand the user's intent, convert it into headless browser operations, and execute actions, each of which can be incredibly complex on their own.
 
-![public/agent_mess.png](public/agent_mess.png)
-
 Stagehand is a tool that helps you build web agents. It allows you to convert natural language into headless browser operations, execute actions on the browser, and extract results back into structured data.
-
-![public/stagehand_clean.png](public/stagehand_clean.png)
-
-Under the hood, we have a very simple agent loop that just calls Stagehand to convert the user's intent into headless browser operations, and then calls Browserbase to execute those operations.
-
-![public/agent_loop.png](public/agent_loop.png)
 
 Stagehand uses Browserbase to execute actions on the browser, and OpenAI to understand the user's intent.
 
-For more on this, check out the code at [this commit](https://github.com/browserbase/open-operator/blob/6f2fba55b3d271be61819dc11e64b1ada52646ac/index.ts).
 
 ### Key Technologies
 
