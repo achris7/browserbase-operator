@@ -137,6 +137,27 @@ export async function POST(request: Request) {
       timezone,
       providedContextId
     );
+
+    // Create session on Django API with session ID and hardcoded email
+    const response = await fetch('http://127.0.0.1:8000/api/browser-sessions/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: "abc@example.com",  // Use hardcoded email here
+        browser_session_id: session.id,  // Pass the session ID
+        session_status: session.status,
+      }),
+    });
+    // Log response details for debugging
+    const responseBody = await response.json();
+    console.log("Django API response:", responseBody);
+
+    if (!response.ok) {
+      throw new Error('Failed to store session in Django API');
+    }
+
     const liveUrl = await getDebugUrl(session.id);
     return NextResponse.json({
       success: true,
@@ -158,4 +179,67 @@ export async function DELETE(request: Request) {
   const sessionId = body.sessionId as string;
   await endSession(sessionId);
   return NextResponse.json({ success: true });
+}
+
+export async function GET(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const sessionId = searchParams.get('sessionId');
+
+    console.log("Received request for sessionId:", sessionId);
+    console.log("API Key available:", !!process.env.BROWSERBASE_API_KEY);
+
+    if (!sessionId) {
+      return NextResponse.json({ error: 'Session ID is required' }, { status: 400 });
+    }
+
+    if (!process.env.BROWSERBASE_API_KEY) {
+      return NextResponse.json({ error: 'API key is not configured' }, { status: 500 });
+    }
+
+    console.log("Making request to Browserbase API...");
+    
+    const response = await fetch(
+      `https://api.browserbase.com/v1/sessions/${sessionId}/recording`,
+      {
+        headers: {
+          'X-BB-API-Key': process.env.BROWSERBASE_API_KEY,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        cache: 'no-cache',
+        next: { revalidate: 0 }
+      }
+    );
+
+    console.log("Browserbase API response status:", response.status);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Browserbase API error response:", errorText);
+      return NextResponse.json(
+        { error: `Browserbase API error: ${response.status} ${response.statusText}` },
+        { status: response.status }
+      );
+    }
+
+    const data = await response.json();
+    console.log("Successfully received data from Browserbase");
+    
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error('Detailed error in GET handler:', {
+      error,
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined
+    });
+    
+    return NextResponse.json(
+      { 
+        error: 'Failed to fetch recording',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
+    );
+  }
 }

@@ -6,6 +6,7 @@ import ChatFeed from "./components/ChatFeed";
 import AnimatedButton from "./components/AnimatedButton";
 import Image from "next/image";
 import posthog from "posthog-js";
+import SessionsList from "./components/SessionsList";
 
 const Tooltip = ({ children, text }: { children: React.ReactNode; text: string }) => {
   return (
@@ -72,116 +73,119 @@ export default function Home() {
   );
 
   return (
-    <AnimatePresence mode="wait">
-      {!isChatVisible ? (
-        <div className="min-h-screen bg-gray-50 flex flex-col">
-          {/* Top Navigation */}
-          <nav className="flex justify-between items-center px-8 py-4 bg-white border-b border-gray-200">
-            <div className="flex items-center gap-3">
-              <Image
-                src="/quell-logo.svg"
-                alt="Quell"
-                width={200}
-                height={50}
-                className="w-48 h-auto"
-                priority
-                unoptimized
-              />
-            </div>
-          </nav>
-
-          {/* Main Content */}
-          <main className="flex-1 flex flex-col items-center justify-center p-6">
-            <div className="w-full max-w-[640px] bg-white border border-gray-200 shadow-sm">
-              <div className="w-full h-12 bg-white border-b border-gray-200 flex items-center px-4">
-                <div className="flex items-center gap-2">
-                  <Tooltip text="Questions?">
-                    <div className="w-3 h-3 rounded-full bg-red-500" />
-                  </Tooltip>
-                  <Tooltip text="Suggestions?">
-                    <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                  </Tooltip>
-                  <Tooltip text="Email us! Hello@Quellit.ai">
-                    <div className="w-3 h-3 rounded-full bg-green-500" />
-                  </Tooltip>
-                </div>
+    <>
+      <AnimatePresence mode="wait">
+        {!isChatVisible ? (
+          <div className="min-h-screen bg-gray-50 flex flex-col">
+            {/* Top Navigation */}
+            <nav className="flex justify-between items-center px-8 py-4 bg-white border-b border-gray-200">
+              <div className="flex items-center gap-3">
+                <Image
+                  src="/quell-logo.svg"
+                  alt="Quell"
+                  width={200}
+                  height={50}
+                  className="w-48 h-auto"
+                  priority
+                  unoptimized
+                />
               </div>
+            </nav>
 
-              <div className="p-8 flex flex-col items-center gap-8">
-                <div className="flex flex-col items-center gap-3">
-                  <h1 className="text-2xl font-ppneue text-gray-900 text-center">
-                    Quell your product fears
-                  </h1>
-                  <p className="text-base font-ppsupply text-gray-500 text-center">
-                    Hit run to Quell!
-                  </p>
-                </div>
-
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    const formData = new FormData(e.currentTarget);
-                    const input = e.currentTarget.querySelector(
-                      'input[name="message"]'
-                    ) as HTMLInputElement;
-                    const message = (formData.get("message") as string).trim();
-                    const finalMessage = message || input.placeholder;
-                    startChat(finalMessage);
-                  }}
-                  className="w-full max-w-[720px] flex flex-col items-center gap-3"
-                >
-                  <div className="relative w-full">
-                    <input
-                      name="message"
-                      type="text"
-                      placeholder="What feature and URL can I test?"
-                      className="w-full px-4 py-3 pr-[100px] border border-gray-200 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FF3B00] focus:border-transparent font-ppsupply"
-                    />
-                    <AnimatedButton type="submit">Run</AnimatedButton>
+            {/* Main Content */}
+            <main className="flex-1 flex flex-col items-center justify-center p-6">
+              <div className="w-full max-w-[640px] bg-white border border-gray-200 shadow-sm">
+                <div className="w-full h-12 bg-white border-b border-gray-200 flex items-center px-4">
+                  <div className="flex items-center gap-2">
+                    <Tooltip text="Questions?">
+                      <div className="w-3 h-3 rounded-full bg-red-500" />
+                    </Tooltip>
+                    <Tooltip text="Suggestions?">
+                      <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                    </Tooltip>
+                    <Tooltip text="Email us! Hello@Quellit.ai">
+                      <div className="w-3 h-3 rounded-full bg-green-500" />
+                    </Tooltip>
                   </div>
-                </form>
-                <div className="grid grid-cols-2 gap-3 w-full">
-                  <button
-                    onClick={() =>
-                      startChat(
-                        "Who is the top GitHub contributor to Stagehand by Browserbase?"
-                      )
-                    }
-                    className="p-3 text-sm text-gray-600 border border-gray-200 hover:border-[#FF3B00] hover:text-[#FF3B00] transition-colors font-ppsupply text-left"
+                </div>
+
+                <div className="p-8 flex flex-col items-center gap-8">
+                  <div className="flex flex-col items-center gap-3">
+                    <h1 className="text-2xl font-ppneue text-gray-900 text-center">
+                      Quell your product fears
+                    </h1>
+                    <p className="text-base font-ppsupply text-gray-500 text-center">
+                      Hit run to Quell!
+                    </p>
+                  </div>
+
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      const formData = new FormData(e.currentTarget);
+                      const input = e.currentTarget.querySelector(
+                        'input[name="message"]'
+                      ) as HTMLInputElement;
+                      const message = (formData.get("message") as string).trim();
+                      const finalMessage = message || input.placeholder;
+                      startChat(finalMessage);
+                    }}
+                    className="w-full max-w-[720px] flex flex-col items-center gap-3"
                   >
-                    Who is the top contributor to Stagehand?
-                  </button>
-                  <button
-                    onClick={() =>
-                      startChat("How many wins do the 49ers have?")
-                    }
-                    className="p-3 text-sm text-gray-600 border border-gray-200 hover:border-[#FF3B00] hover:text-[#FF3B00] transition-colors font-ppsupply text-left"
-                  >
-                    How many wins do the 49ers have?
-                  </button>
-                  <button
-                    onClick={() => startChat("What is Stephen Curry's PPG?")}
-                    className="p-3 text-sm text-gray-600 border border-gray-200 hover:border-[#FF3B00] hover:text-[#FF3B00] transition-colors font-ppsupply text-left"
-                  >
-                    What is Stephen Curry&apos;s PPG?
-                  </button>
-                  <button
-                    onClick={() => startChat("How much is NVIDIA stock?")}
-                    className="p-3 text-sm text-gray-600 border border-gray-200 hover:border-[#FF3B00] hover:text-[#FF3B00] transition-colors font-ppsupply text-left"
-                  >
-                    How much is NVIDIA stock?
-                  </button>
+                    <div className="relative w-full">
+                      <input
+                        name="message"
+                        type="text"
+                        placeholder="What feature and URL can I test?"
+                        className="w-full px-4 py-3 pr-[100px] border border-gray-200 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FF3B00] focus:border-transparent font-ppsupply"
+                      />
+                      <AnimatedButton type="submit">Run</AnimatedButton>
+                    </div>
+                  </form>
+                  <div className="grid grid-cols-2 gap-3 w-full">
+                    <button
+                      onClick={() =>
+                        startChat(
+                          "Who is the top GitHub contributor to Stagehand by Browserbase?"
+                        )
+                      }
+                      className="p-3 text-sm text-gray-600 border border-gray-200 hover:border-[#FF3B00] hover:text-[#FF3B00] transition-colors font-ppsupply text-left"
+                    >
+                      Who is the top contributor to Stagehand?
+                    </button>
+                    <button
+                      onClick={() =>
+                        startChat("How many wins do the 49ers have?")
+                      }
+                      className="p-3 text-sm text-gray-600 border border-gray-200 hover:border-[#FF3B00] hover:text-[#FF3B00] transition-colors font-ppsupply text-left"
+                    >
+                      How many wins do the 49ers have?
+                    </button>
+                    <button
+                      onClick={() => startChat("What is Stephen Curry's PPG?")}
+                      className="p-3 text-sm text-gray-600 border border-gray-200 hover:border-[#FF3B00] hover:text-[#FF3B00] transition-colors font-ppsupply text-left"
+                    >
+                      What is Stephen Curry&apos;s PPG?
+                    </button>
+                    <button
+                      onClick={() => startChat("How much is NVIDIA stock?")}
+                      className="p-3 text-sm text-gray-600 border border-gray-200 hover:border-[#FF3B00] hover:text-[#FF3B00] transition-colors font-ppsupply text-left"
+                    >
+                      How much is NVIDIA stock?
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </main>
-        </div>
-      ) : (
-        <ChatFeed
-          initialMessage={initialMessage}
-          onClose={() => setIsChatVisible(false)}
-        />
-      )}
-    </AnimatePresence>
+            </main>
+          </div>
+        ) : (
+          <ChatFeed
+            initialMessage={initialMessage}
+            onClose={() => setIsChatVisible(false)}
+          />
+        )}
+      </AnimatePresence>
+      <SessionsList />
+    </>
   );
 }
