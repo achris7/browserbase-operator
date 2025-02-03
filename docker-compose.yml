@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - BROWSERBASE_API_KEY=${BROWSERBASE_API_KEY}
+      - BROWSERBASE_PROJECT_ID=${BROWSERBASE_PROJECT_ID}
+      - NEXT_TELEMETRY_DISABLED=1
+      - BACKEND_URL=http://backend:8000
+    volumes:
+      - ./app:/app/app
+      - ./.next:/app/.next
+      - ./public:/app/public
+      - pnpm_cache:/root/.local/share/pnpm/store
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=1
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+      - DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,backend
+      - SQL_ENGINE=django.db.backends.postgresql
+      - SQL_DATABASE=browserbase
+      - SQL_USER=postgres
+      - SQL_PASSWORD=1234
+      - SQL_HOST=db
+      - SQL_PORT=5432
+    volumes:
+      - ./backend:/app/backend
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=browserbase
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
+  pnpm_cache: 

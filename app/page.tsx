@@ -6,7 +6,6 @@ import ChatFeed from "./components/ChatFeed";
 import AnimatedButton from "./components/AnimatedButton";
 import Image from "next/image";
 import posthog from "posthog-js";
-import SessionsList from "./components/SessionsList";
 
 const Tooltip = ({ children, text }: { children: React.ReactNode; text: string }) => {
   return (

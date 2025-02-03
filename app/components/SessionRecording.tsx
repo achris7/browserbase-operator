@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from 'react';
 import Player from 'rrweb-player';
 import 'rrweb-player/dist/style.css';

@@ -248,7 +248,7 @@ export default function ChatFeed({ initialMessage, onClose }: ChatFeedProps) {
     };
 
     initializeSession();
-  }, [initialMessage]);
+  }, [initialMessage, contextId, setContextId]);
 
   // Spring configuration for smoother animations
   const springConfig = {

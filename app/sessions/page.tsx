@@ -5,6 +5,7 @@ import SessionsList from "../components/SessionsList";
 import Modal from "../components/Modal";
 import SessionRecording from "../components/SessionRecording";
 import Image from "next/image";
+import Link from 'next/link';
 
 export default function SessionsPage() {
   const [selectedSession, setSelectedSession] = useState<string | null>(null);
@@ -14,7 +15,7 @@ export default function SessionsPage() {
       {/* Top Navigation */}
       <nav className="flex justify-between items-center px-8 py-4 bg-white border-b border-gray-200">
         <div className="flex items-center gap-3">
-          <a href="/">
+          <Link href="/">
             <Image
               src="/quell-logo.svg"
               alt="Quell"
@@ -24,7 +25,7 @@ export default function SessionsPage() {
               priority
               unoptimized
             />
-          </a>
+          </Link>
         </div>
       </nav>
 
