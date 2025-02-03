@@ -34,20 +34,23 @@ export default function SessionRecording({ sessionId }: SessionRecordingProps) {
           throw new Error(`Failed to fetch recording: ${response.status} ${response.statusText}`);
         }
 
-        const data = await response.json();
-        console.log("Raw response data:", data);
+        const responseData = await response.json();
+        console.log("Raw response data:", responseData);
 
-        // Check if we have events data
-        if (!data.events || !Array.isArray(data.events) || data.events.length === 0) {
-          console.log("No recording events found");
+        // Assuming the response has a data property that contains the events
+        const events = responseData.data || responseData.events || responseData;
+        
+        // Check if we have valid events data
+        if (!events || !Array.isArray(events) || events.length === 0) {
+          console.log("No recording events found in response:", responseData);
           setError('No recording available for this session');
           return;
         }
 
-        console.log("Received events:", {
-          eventCount: data.events.length,
-          firstEvent: data.events[0],
-          lastEvent: data.events[data.events.length - 1]
+        console.log("Processing events:", {
+          eventCount: events.length,
+          firstEvent: events[0],
+          lastEvent: events[events.length - 1]
         });
         
         if (containerRef.current) {
@@ -56,11 +59,11 @@ export default function SessionRecording({ sessionId }: SessionRecordingProps) {
           containerRef.current.innerHTML = '';
           
           try {
-            // Initialize the player
+            // Initialize the player with the events array
             player = new Player({
               target: containerRef.current,
               props: {
-                events: data.events,
+                events: events,
                 width: 1024,
                 height: 576,
                 autoPlay: true,
@@ -70,6 +73,7 @@ export default function SessionRecording({ sessionId }: SessionRecordingProps) {
             console.log("Player initialized successfully");
           } catch (playerError) {
             console.error("Player initialization error:", playerError);
+            console.error("Events data causing error:", JSON.stringify(events, null, 2));
             throw new Error('Failed to initialize player');
           }
         }
