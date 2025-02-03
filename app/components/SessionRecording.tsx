@@ -22,58 +22,48 @@ export default function SessionRecording({ sessionId }: SessionRecordingProps) {
         console.log("Making API request...");
         const response = await fetch(`/api/session?sessionId=${sessionId}`);
 
-        console.log("API Response:", {
-          status: response.status,
-          statusText: response.statusText,
-          headers: Object.fromEntries(response.headers.entries())
-        });
-
         if (!response.ok) {
           const errorText = await response.text();
           console.error("API Error Response:", errorText);
           throw new Error(`Failed to fetch recording: ${response.status} ${response.statusText}`);
         }
 
-        const responseData = await response.json();
-        console.log("Raw response data:", responseData);
+        const events = await response.json();
+        console.log("Received events:", {
+          eventCount: events.length,
+          timeRange: events.length > 0 ? {
+            start: new Date(events[0].timestamp).toISOString(),
+            end: new Date(events[events.length - 1].timestamp).toISOString(),
+            durationMs: events[events.length - 1].timestamp - events[0].timestamp
+          } : null
+        });
 
-        // Assuming the response has a data property that contains the events
-        const events = responseData.data || responseData.events || responseData;
-        
-        // Check if we have valid events data
-        if (!events || !Array.isArray(events) || events.length === 0) {
-          console.log("No recording events found in response:", responseData);
+        if (!Array.isArray(events) || events.length === 0) {
+          console.log("No recording events found");
           setError('No recording available for this session');
           return;
         }
 
-        console.log("Processing events:", {
-          eventCount: events.length,
-          firstEvent: events[0],
-          lastEvent: events[events.length - 1]
-        });
-        
         if (containerRef.current) {
           console.log("Initializing player with events...");
-          // Clear any existing content
           containerRef.current.innerHTML = '';
           
           try {
-            // Initialize the player with the events array
             player = new Player({
               target: containerRef.current,
               props: {
                 events: events,
-                width: 1024,
-                height: 576,
+                width: Math.min(1024, window.innerWidth - 48), // Responsive width
+                height: Math.min(576, window.innerHeight - 200), // Responsive height
                 autoPlay: true,
                 showController: true,
+                skipInactive: true,
+                speedOption: [1, 2, 4, 8],
               },
             });
             console.log("Player initialized successfully");
           } catch (playerError) {
             console.error("Player initialization error:", playerError);
-            console.error("Events data causing error:", JSON.stringify(events, null, 2));
             throw new Error('Failed to initialize player');
           }
         }
@@ -91,7 +81,6 @@ export default function SessionRecording({ sessionId }: SessionRecordingProps) {
 
     fetchAndPlayRecording();
 
-    // Cleanup
     return () => {
       if (player && typeof player.destroy === 'function') {
         player.destroy();
@@ -101,7 +90,7 @@ export default function SessionRecording({ sessionId }: SessionRecordingProps) {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-[576px]">
+      <div className="flex justify-center items-center h-full">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#FF3B00]"></div>
       </div>
     );
@@ -109,11 +98,11 @@ export default function SessionRecording({ sessionId }: SessionRecordingProps) {
 
   if (error) {
     return (
-      <div className="flex justify-center items-center h-[576px] text-red-500">
+      <div className="flex justify-center items-center h-full text-red-500">
         {error}
       </div>
     );
   }
 
-  return <div ref={containerRef} className="w-full aspect-video" />;
+  return <div ref={containerRef} className="w-full h-full flex items-center justify-center" />;
 } 
