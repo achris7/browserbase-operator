@@ -11,7 +11,7 @@ class BrowserBaseSessionsViewSet(viewsets.ModelViewSet):
     serializer_class = BrowserBaseSessionsSerializer
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().order_by('-created_at')
         browser_session_id = self.request.query_params.get('browser_session_id')
         email = self.request.query_params.get('email')
 

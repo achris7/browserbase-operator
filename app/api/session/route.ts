@@ -139,7 +139,7 @@ export async function POST(request: Request) {
     );
 
     // Create session on Django API with session ID and hardcoded email
-    const response = await fetch('http://127.0.0.1:8000/api/browser-sessions/', {
+    const response = await fetch('http://backend:8000/api/browser-sessions/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

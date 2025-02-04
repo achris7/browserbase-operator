@@ -7,6 +7,8 @@ import Image from "next/image";
 import { useAtom } from "jotai/react";
 import { contextIdAtom } from "../atoms";
 import posthog from "posthog-js";
+import { useRouter } from 'next/navigation';
+
 interface ChatFeedProps {
   initialMessage?: string;
   onClose: () => void;
@@ -29,7 +31,9 @@ interface AgentState {
 }
 
 export default function ChatFeed({ initialMessage, onClose }: ChatFeedProps) {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const { width } = useWindowSize();
   const isMobile = width ? width < 768 : false;
   const initializationRef = useRef(false);
@@ -235,7 +239,9 @@ export default function ChatFeed({ initialMessage, onClose }: ChatFeedProps) {
               }
 
               if (executeData.done) {
-                break;
+                setIsRedirecting(true);
+                await new Promise(resolve => setTimeout(resolve, 1000)); // Optional delay for UX
+                router.push('/sessions'); // Redirect to sessions page
               }
             }
           }
@@ -248,7 +254,7 @@ export default function ChatFeed({ initialMessage, onClose }: ChatFeedProps) {
     };
 
     initializeSession();
-  }, [initialMessage, contextId, setContextId]);
+  }, [initialMessage, router]);
 
   // Spring configuration for smoother animations
   const springConfig = {
@@ -279,6 +285,17 @@ export default function ChatFeed({ initialMessage, onClose }: ChatFeedProps) {
     visible: { opacity: 1, y: 0 },
     exit: { opacity: 0, y: -20 },
   };
+
+  if (isRedirecting) {
+    return (
+      <div className="fixed inset-0 bg-white bg-opacity-90 z-50 flex flex-col items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#FF3B00] mb-4"></div>
+        <p className="text-gray-900 font-ppsupply text-lg">
+          Session completed! Redirecting to sessions...
+        </p>
+      </div>
+    );
+  }
 
   return (
     <motion.div

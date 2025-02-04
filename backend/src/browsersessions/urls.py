@@ -10,6 +10,6 @@ urlpatterns = router.urls  # Includes default DRF routes
 
 # Add custom routes for operations based on `browser_session_id`
 urlpatterns += [
-    path('browser-sessions/browser-session/<int:browser_session_id>/',
+    path('browser-sessions/browser-session/<str:browser_session_id>/',
          BrowserBaseSessionsViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
 ]

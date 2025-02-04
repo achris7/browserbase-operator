@@ -11,7 +11,8 @@ services:
       - BROWSERBASE_API_KEY=${BROWSERBASE_API_KEY}
       - BROWSERBASE_PROJECT_ID=${BROWSERBASE_PROJECT_ID}
       - NEXT_TELEMETRY_DISABLED=1
-      - BACKEND_URL=http://backend:8000
+      - BACKEND_URL=${BACKEND_URL}
+      - NEXT_PUBLIC_API_URL=http://backend:8000/api
     volumes:
       - ./app:/app/app
       - ./.next:/app/.next

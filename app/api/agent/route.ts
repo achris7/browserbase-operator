@@ -217,6 +217,26 @@ Return a URL that would be most effective for achieving this goal.`
   return result.object;
 }
 
+async function updateSessionStatus(sessionId: string, status: string) {
+  try {
+    const response = await fetch(`http://backend:8000/api/browser-sessions/browser-session/${sessionId}/`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        session_status: status
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update session status');
+    }
+  } catch (error) {
+    console.error('Error updating session status:', error);
+  }
+}
+
 export async function GET() {
   return NextResponse.json({ message: 'Agent API endpoint ready' });
 }
@@ -281,6 +301,10 @@ export async function POST(request: Request) {
           previousSteps,
         });
 
+        if (result.tool === "CLOSE") {
+          await updateSessionStatus(sessionId, "COMPLETED");
+        }
+
         return NextResponse.json({
           success: true,
           result,
@@ -304,6 +328,10 @@ export async function POST(request: Request) {
           method: step.tool,
           instruction: step.instruction,
         });
+
+        if (step.tool === "CLOSE") {
+          await updateSessionStatus(sessionId, "COMPLETED");
+        }
 
         return NextResponse.json({
           success: true,
